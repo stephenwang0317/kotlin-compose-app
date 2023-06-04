@@ -287,34 +287,18 @@ fun showDialog(
     onClose: () -> Unit
 ) {
     // alert
-    when (alertDialogType) {
-        1 -> alertDialog(
-            isShow = showAlertDialog,
-            title = "提示",
-            infoText = "请填写账号密码",
-            onClose = onClose
-        )
-        2 -> alertDialog(
-            isShow = showAlertDialog,
-            title = "提示",
-            infoText = "账号密码错误", onClose = onClose
-        )
-        3 -> alertDialog(
-            isShow = showAlertDialog,
-            title = "提示",
-            infoText = "两次密码输入不一致", onClose = onClose
-        )
-        4 -> alertDialog(
-            isShow = showAlertDialog,
-            title = "提示",
-            infoText = "注册失败", onClose = onClose
-        )
-        5 -> alertDialog(
-            isShow = showAlertDialog,
-            title = "提示",
-            infoText = "用户名最长10个字符", onClose = onClose
-        )
-        else -> {}
-    }
+    alertDialog(
+        isShow = showAlertDialog,
+        title = "提示",
+        infoText = when (alertDialogType) {
+            1 -> "请填写账号密码"
+            2 -> "账号密码错误"
+            3 -> "两次密码输入不一致"
+            4 -> "注册失败"
+            5 -> "用户名最长10个字符"
+            else -> ""
+        },
+        onClose = onClose
+    )
 }
 

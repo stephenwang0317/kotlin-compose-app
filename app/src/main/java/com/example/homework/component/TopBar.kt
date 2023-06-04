@@ -13,6 +13,7 @@ import kotlinx.coroutines.launch
 fun MyTopAppBar(
     titleText: String,
     icon: ImageVector,
+    onclick: ()->Unit
 ) {
 
     TopAppBar(
@@ -22,9 +23,7 @@ fun MyTopAppBar(
             )
         },
         navigationIcon = {
-            IconButton(onClick = {
-
-            }) {
+            IconButton(onClick = onclick) {
                 Icon(icon, contentDescription = null)
             }
         },

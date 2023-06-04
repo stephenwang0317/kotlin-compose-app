@@ -13,12 +13,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.example.homework.component.DrawerContent
-import com.example.homework.component.MyBottomBar
-import com.example.homework.component.MyFab
-import com.example.homework.component.MyTopAppBar
+import com.example.homework.component.*
 import com.example.homework.compositionLocal.LocalUserViewModel
 import com.example.homework.ui.theme.Purple500
 import com.example.homework.viewmodel.ArticleViewModel
@@ -41,9 +39,9 @@ fun HomeView(
 
     val coroutineScope = rememberCoroutineScope()
 
-//    LaunchedEffect(Unit){
-//        articleViewModel.getAllArticle()
-//    }
+    LaunchedEffect(Unit) {
+        articleViewModel.getAllArticle()
+    }
 
     ProvideWindowInsets {
         rememberSystemUiController().setStatusBarColor(
@@ -60,52 +58,31 @@ fun HomeView(
                     .statusBarsHeight()
             )
 
-            Scaffold(
-                topBar = {
-                    MyTopAppBar(
-                        titleText = "首页",
-                        icon = Icons.Default.Menu,
-                    )
-                },
-                bottomBar = {
-                    MyBottomBar(navHostController = navHostController)
-                },
-                drawerContent = { DrawerContent(userViewModel = userViewModel) },
-                drawerShape = RoundedCornerShape(
-                    topStartPercent = 0,
-                    topEndPercent = 10,
-                    bottomStartPercent = 0,
-                    bottomEndPercent = 10
-                ),
-                floatingActionButton = {
-                    MyFab(
-                        onFinish = { navHostController.navigate("NewArticlePage") },
-                        icon = {
-                            Icon(
-                                imageVector = Icons.Default.Add,
-                                contentDescription = null,
-                                modifier = Modifier.size(50.dp),
-                            )
-                        },
-                        baseSize = 100
-                    )
-                },
-                isFloatingActionButtonDocked = true,
-                floatingActionButtonPosition = FabPosition.Center
-            ) {
-                LazyColumn(
-                    contentPadding = it,
-                    verticalArrangement = Arrangement.spacedBy(5.dp),
-                    content = {
-                        items(
-                            articleViewModel.articleModel?.articleItems ?: Collections.EMPTY_LIST
-                        ){
-                            articleViewModel.articleModel?.articleItems?.forEach(){ article ->
+            MyExtendScaffold {
+                if (articleViewModel.loading) {
+                    Column(
+                        modifier = Modifier.fillMaxSize(),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(100.dp),
+                            color = Purple500
+                        )
+                    }
+                } else {
+                    LazyColumn(
+                        contentPadding = it,
+                        verticalArrangement = Arrangement.spacedBy(10.dp),
+                        content = {
+                            items(
+                                articleViewModel.tmpList
+                            ) { article ->
                                 ArticleCard(articleItem = article)
                             }
                         }
-                    }
-                )
+                    )
+                }
             }
 
         }

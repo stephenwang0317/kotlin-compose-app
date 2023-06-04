@@ -4,7 +4,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Divider
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
@@ -13,49 +16,53 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
 import com.example.homework.R
 import com.example.homework.compositionLocal.LocalNavController
-import com.example.homework.model.entity.UserModel
+import com.example.homework.compositionLocal.LocalUserViewModel
 import com.example.homework.viewmodel.UserViewModel
 import kotlinx.coroutines.launch
 
 
 @Composable
-fun MyDrawer(
-    drawerState: DrawerState,
-    userViewModel: UserViewModel,
-    content: @Composable() () -> Unit
-) {
-    val scope = rememberCoroutineScope()
-
-    ModalDrawer(
-        drawerContent = { DrawerContent(userViewModel = userViewModel) },
-        drawerState = drawerState,
-        drawerShape = MaterialTheme.shapes.small,
-        content = content,
-    )
-}
-
-
-@Composable
 fun DrawerContent(
     modifier: Modifier = Modifier,
-    userViewModel: UserViewModel
 ) {
+    val userViewModel = LocalUserViewModel.current
+    val coroutineScope = rememberCoroutineScope()
+    val navHostController = LocalNavController.current
+    
     Column(
-        modifier = Modifier.fillMaxSize()
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.fillMaxHeight(0.08f))
-        DrawerHead(userViewModel = userViewModel)
+        DrawerHead(userViewModel = userViewModel, modifier = Modifier.fillMaxWidth())
         Spacer(modifier = Modifier.fillMaxHeight(0.02f))
         Divider(thickness = 2.dp, modifier = Modifier.fillMaxWidth(0.8f))
+        Spacer(modifier = Modifier.weight(1f))
+
+        Button(
+            onClick = {
+                coroutineScope.launch {
+                    userViewModel.logout()
+                    navHostController.navigate("LoginPage")
+                }
+            },
+            enabled = !userViewModel.loading,
+            modifier = Modifier.padding(20.dp)
+        ) {
+            Text(
+                text = stringResource(id = R.string.logout),
+            )
+            if (userViewModel.loading) {
+                CircularProgressIndicator(modifier = Modifier.size(20.dp))
+            }
+        }
     }
 }
 
@@ -65,8 +72,6 @@ fun DrawerHead(
     userViewModel: UserViewModel,
 ) {
     val userModel = userViewModel.userInfo
-    val coroutineScope = rememberCoroutineScope()
-    val navHostController = LocalNavController.current
     Row(
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.Bottom,
@@ -107,22 +112,5 @@ fun DrawerHead(
             )
         }
         Spacer(modifier = Modifier.weight(1.0f))
-        Button(
-            onClick = {
-                coroutineScope.launch {
-                    userViewModel.logout()
-                    navHostController.navigate("LoginPage")
-                }
-            },
-            enabled = !userViewModel.loading
-        ) {
-            Text(
-                text = stringResource(id = R.string.logout),
-            )
-            if (userViewModel.loading) {
-                CircularProgressIndicator(modifier = Modifier.size(20.dp))
-            }
-        }
-        Spacer(modifier = Modifier.width(20.dp))
     }
 }

@@ -44,40 +44,7 @@ fun HotView() {
                     .fillMaxWidth()
                     .statusBarsHeight()
             )
-            Scaffold(
-                topBar = {
-                    MyTopAppBar(
-                        titleText = "首页",
-                        icon = Icons.Default.Menu,
-                        drawerState = drawerState
-                    )
-                },
-                bottomBar = {
-                    MyBottomBar(navHostController = navHostController)
-                },
-                drawerContent = {
-                    DrawerContent(userViewModel = userViewModel)
-                },
-                drawerShape = RoundedCornerShape(
-                    topStartPercent = 0,
-                    topEndPercent = 10,
-                    bottomStartPercent = 0,
-                    bottomEndPercent = 10
-                ),
-                floatingActionButton = {
-                    MyFab(
-                        onFinish = { navHostController.navigate("NewArticlePage") },
-                        icon = {
-                            Icon(
-                                imageVector = Icons.Default.Add,
-                                contentDescription = null,
-                                modifier = Modifier.size(50.dp),
-                            )
-                        },
-                        baseSize = 100
-                    )
-                },
-            ) {
+            MyExtendScaffold {
                 LazyColumn(content = {
                     val list = (0..100).toList().map {
                         it.toString()

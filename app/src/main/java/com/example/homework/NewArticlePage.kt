@@ -8,8 +8,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Backpack
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
@@ -18,6 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.homework.component.MyFab
+import com.example.homework.component.alertDialog
 import com.example.homework.compositionLocal.LocalNavController
 import com.example.homework.compositionLocal.LocalUserViewModel
 import com.example.homework.model.entity.UserModel
@@ -34,6 +34,13 @@ fun NewArticlePage(
     val userViewModel = LocalUserViewModel.current
 
     val newArticleItemViewModel = NewArticleItemViewModel()
+
+    var alertType by remember {
+        mutableStateOf(0)
+    }
+    var showAlertDialog by remember {
+        mutableStateOf(false)
+    }
 
     Scaffold(
         topBar = {
@@ -53,6 +60,20 @@ fun NewArticlePage(
             MyFab(
                 onFinish = {
                     coroutineScope.launch {
+                        when {
+                            newArticleItemViewModel.title.length >= 50 -> {
+                                alertType = 1; showAlertDialog = true
+                                newArticleItemViewModel.title =
+                                    newArticleItemViewModel.title.substring(0, 49)
+                            }
+                            newArticleItemViewModel.content.isEmpty() -> {
+                                alertType = 2; showAlertDialog = true
+                            }
+                            newArticleItemViewModel.title.isEmpty() -> {
+                                alertType = 3; showAlertDialog = true
+                            }
+                        }
+                        if (showAlertDialog) return@launch
                         newArticleItemViewModel.postArticle(
                             userViewModel.userInfo ?: UserModel()
                         )
@@ -70,12 +91,26 @@ fun NewArticlePage(
             )
         }
     ) {
+
+        alertDialog(
+            isShow = showAlertDialog,
+            title = "提示",
+            infoText = when (alertType) {
+                1 -> "题目不能超过50字"
+                2 -> "请填写内容"
+                3 -> "请填写题目"
+                else -> ""
+            }
+        ) {
+            showAlertDialog = !showAlertDialog
+        }
+
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
             OutlinedTextField(
                 value = newArticleItemViewModel.title,
-                onValueChange = { newArticleItemViewModel.title = it},
+                onValueChange = { newArticleItemViewModel.title = it },
                 singleLine = true,
                 modifier = Modifier
                     .padding(
@@ -117,7 +152,7 @@ fun NewArticlePage(
             )
             OutlinedTextField(
                 value = newArticleItemViewModel.content,
-                onValueChange = { newArticleItemViewModel.content = it},
+                onValueChange = { newArticleItemViewModel.content = it },
                 modifier = modifier
                     .weight(1f)
                     .fillMaxWidth()
@@ -147,8 +182,9 @@ fun NewArticlePage(
                 },
                 textStyle = TextStyle(
                     fontSize = 20.sp,
+                ),
+
                 )
-            )
             Spacer(modifier = Modifier.height(10.dp))
         }
     }
