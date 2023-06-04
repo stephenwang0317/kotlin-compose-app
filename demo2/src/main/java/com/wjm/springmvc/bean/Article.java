@@ -3,6 +3,7 @@ package com.wjm.springmvc.bean;
 public class Article {
     public Integer art_id;
     public Integer art_author;
+    public String art_author_name;
     public Integer art_like;
     public String art_title;
     public String art_content;
@@ -25,7 +26,14 @@ public class Article {
         this.art_summary = art_summary;
     }
 
-    public Article(Integer art_id, Integer art_author, Integer art_like, String art_title, String art_content, String art_summary, String art_time) {
+    public Article(Integer art_id,
+                   Integer art_author,
+                   Integer art_like,
+                   String art_title,
+                   String art_content,
+                   String art_summary,
+                   String art_time,
+                   String art_author_name) {
         this.art_id = art_id;
         this.art_author = art_author;
         this.art_like = art_like;
@@ -33,6 +41,7 @@ public class Article {
         this.art_content = art_content;
         this.art_summary = art_summary;
         this.art_time = art_time;
+        this.art_author_name = art_author_name;
     }
 
     public Article() {
@@ -77,5 +86,13 @@ public class Article {
 
     public void setArt_time(String art_time) {
         this.art_time = art_time;
+    }
+
+    public String getArt_author_name() {
+        return art_author_name;
+    }
+
+    public void setArt_author_name(String art_author_name) {
+        this.art_author_name = art_author_name;
     }
 }

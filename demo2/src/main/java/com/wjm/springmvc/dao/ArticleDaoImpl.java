@@ -41,13 +41,13 @@ public class ArticleDaoImpl implements ArticleDao {
     @Override
     public boolean addArticle(Article a) {
         if (a.getArt_content().length() > 50) {
-            a.setArt_summary(a.getArt_content().substring(0, 49) + " ...");
+            a.setArt_summary(a.getArt_content().substring(0, 44) + " ...");
         } else {
             a.setArt_summary(a.getArt_content());
         }
 
         Timestamp timestamp = new Timestamp(new Date().getTime());
-        String sql = "insert into Article value(null,?,?,?,?,?,?)";
+        String sql = "insert into Article value(null,?,?,?,?,?,?,?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         int row = jdbcTemplate.update(new PreparedStatementCreator() {
             @Override
@@ -59,6 +59,7 @@ public class ArticleDaoImpl implements ArticleDao {
                 ps.setTimestamp(4, timestamp);
                 ps.setString(5, a.getArt_summary());
                 ps.setInt(6, a.getArt_like());
+                ps.setString(7,a.getArt_author_name());
                 return ps;
             }
         }, keyHolder);
