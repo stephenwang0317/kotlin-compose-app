@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">HomeWork</string>
+    <string name="login">登录</string>
+    <string name="logout">注销</string>
+    <string name="register">注册</string>
+
+    <string name="goto_register">还没有账号？点击注册</string>
+    <string name="goto_login">已有账号？点击登录</string>
+    <string name="save_password">下次自动登录</string>
+
+    <string name="account">账号</string>
+    <string name="password">密码</string>
+    <string name="username">用户名</string>
+    <string name="confirm_password">确认密码</string>
+
+    <string name="main_page">首页</string>
+    <string name="hot_page">热点</string>
+    <string name="myself_page">我的</string>
+
+    <string name="like_num">点赞 %d</string>>
+    <string name="show_more">显示更多...</string>
+</resources>
