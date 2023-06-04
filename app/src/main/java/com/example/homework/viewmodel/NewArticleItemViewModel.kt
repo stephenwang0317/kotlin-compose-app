@@ -28,7 +28,8 @@ class NewArticleItemViewModel {
             artAuthor = userModel.userId,
             artContent = content,
             artLike = 0,
-            artTitle = title
+            artTitle = title,
+            artAuthorName = userModel.userName
         )
 
         val res = articleService.createArticle(tempArticleItem)
