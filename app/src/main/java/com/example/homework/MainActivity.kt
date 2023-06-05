@@ -22,9 +22,11 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.homework.compositionLocal.LocalNavController
 import com.example.homework.compositionLocal.LocalUserViewModel
 
@@ -81,14 +83,17 @@ fun Navigator() {
                 }
             }
             composable("RegisterPage") {
-                RegisterPage(
-                    navHostController = navController,
-
-                    )
+                RegisterPage(navHostController = navController)
             }
             composable("HomePage") { HomePage() }
             composable("HotPage") { HotPage() }
             composable("NewArticlePage") { NewArticlePage() }
+            composable(
+                route = "DetailArticle/{art_id}",
+                arguments = listOf(navArgument("art_id") { type = NavType.IntType })
+            ){
+                DetailArticle(art_id = it.arguments?.getInt("art_id"))
+            }
         }
     }
 }

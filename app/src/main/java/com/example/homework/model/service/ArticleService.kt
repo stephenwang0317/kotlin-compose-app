@@ -3,10 +3,7 @@ package com.example.homework.model.service
 import com.example.homework.model.entity.ArticleModel
 import com.example.homework.model.entity.ArticleModelItem
 import com.example.homework.network.Network
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.Headers
-import retrofit2.http.POST
+import retrofit2.http.*
 
 
 interface ArticleService {
@@ -17,6 +14,11 @@ interface ArticleService {
     @POST("article")
     suspend fun createArticle(
         @Body article: ArticleModelItem
+    ): ArticleModelItem
+
+    @GET("article/{art_id}")
+    suspend fun getArtById(
+        @Path("art_id") art_id:Int
     ): ArticleModelItem
 
     companion object {

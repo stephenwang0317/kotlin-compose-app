@@ -212,7 +212,7 @@ fun LoginBox(
                         return@Button
                     } else {
                         coroutineScope.launch {
-                            userViewModel.register()
+                            userViewModel.register(savePassword)
                             if (userViewModel.userInfo?.userName != null) {
                                 navHostController.navigate("HomePage") {
                                     popUpTo("LoginPage") { inclusive = true }

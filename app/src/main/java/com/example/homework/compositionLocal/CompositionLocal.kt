@@ -9,3 +9,6 @@ val LocalUserViewModel =
 
 val LocalNavController =
     compositionLocalOf<NavHostController> { error("NavHostController Context Not Found") }
+
+val LocalOpenDelay =
+    compositionLocalOf<Boolean> { error("Open Delay Context Not Found") }

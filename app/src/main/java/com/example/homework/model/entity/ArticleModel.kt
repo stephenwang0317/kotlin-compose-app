@@ -22,7 +22,7 @@ data class ArticleModelItem(
     @Json(name = "art_id")
     val artId: Int? = 0,
     @Json(name = "art_like")
-    val artLike: Int? = 0,
+    var artLike: Int = 0,
     @Json(name = "art_summary")
     val artSummary: String? = "",
     @Json(name = "art_time")

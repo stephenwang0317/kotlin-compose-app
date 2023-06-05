@@ -3,6 +3,7 @@ package com.example.homework
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -38,6 +39,7 @@ fun HomeView(
     val articleViewModel = ArticleViewModel()
 
     val coroutineScope = rememberCoroutineScope()
+    val scrollState = rememberLazyListState()
 
     LaunchedEffect(Unit) {
         articleViewModel.getAllArticle()
@@ -80,7 +82,8 @@ fun HomeView(
                             ) { article ->
                                 ArticleCard(articleItem = article)
                             }
-                        }
+                        },
+                        state = scrollState
                     )
                 }
             }

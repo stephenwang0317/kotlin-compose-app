@@ -86,13 +86,20 @@ class UserViewModel(context: Context) : ViewModel() {
         Log.i("=====================", res.toString())
     }
 
-    suspend fun register() {
+    suspend fun register(savePassword: Boolean) {
         loading = true
         val tmpUserModel = UserModel(userName = username, userPwd = password)
         val res = userService.register(tmpUserModel)
         Log.i("==============Register", res.toString())
         if (res.userName != null) {
             userInfo = res
+            if (savePassword) {
+                userInfoManager.save(
+                    userName = res.userName ?: "",
+                    userId = res.userId ?: 0,
+                    userAva = res.userAvatar ?: ""
+                )
+            }
         } else {
 
         }

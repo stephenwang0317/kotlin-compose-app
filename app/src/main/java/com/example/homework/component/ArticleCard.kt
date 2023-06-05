@@ -2,8 +2,14 @@ package com.example.homework
 
 
 import android.util.Log
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.TweenSpec
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -28,9 +34,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.homework.compositionLocal.LocalNavController
 import com.example.homework.model.entity.ArticleModelItem
 import com.example.homework.ui.theme.HomeWorkTheme
 import com.example.homework.ui.theme.Purple200
+import kotlinx.coroutines.launch
+import kotlin.math.abs
 
 
 @ExperimentalMaterialApi
@@ -44,12 +53,12 @@ fun ArticleCard(
 
     articleItem: ArticleModelItem,
 
-    onClick: () -> Unit = {},
-
     ) {
+    val navHostController = LocalNavController.current
+
     Card(
         enabled = true,
-        onClick = onClick,
+        onClick = {},
         shape = RoundedCornerShape(10),
         modifier = Modifier
             .padding(2.dp)
@@ -58,6 +67,7 @@ fun ArticleCard(
             horizontalAlignment = Alignment.Start,
             modifier = Modifier
                 .background(Color.LightGray)
+                .clickable { navHostController.navigate("DetailArticle/" + articleItem.artId) }
         ) {
 
             Text(
@@ -115,34 +125,23 @@ fun ArticleCard(
                     fontSize = contentFontSize.sp
                 )
             }
-            Log.i("++++++++++", lines.toString())
-            if (lines == minLines) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.show_more),
-                        modifier = Modifier
-                            .padding(start = 5.dp, end = 5.dp),
-                        fontSize = 10.sp,
-                        color = Color.Blue,
-                        fontStyle = FontStyle.Italic,
-                        textDecoration = TextDecoration.Underline
-                    )
-                }
-            } else {
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.End
+            ) {
                 Text(
-                    text = "",
-                    fontSize = otherFontSize.sp,
-                    textDecoration = TextDecoration.Underline,
-                    color = Color.Blue,
+                    text = stringResource(id = R.string.show_more),
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 5.dp, end = 5.dp),
-                    textAlign = TextAlign.End,
+                        .padding(start = 5.dp, end = 5.dp)
+                        .clickable { navHostController.navigate("DetailArticle/" + articleItem.artId) },
+                    fontSize = 10.sp,
+                    color = Color.Blue,
+                    fontStyle = FontStyle.Italic,
+                    textDecoration = TextDecoration.Underline
                 )
             }
+
 
             Row(
                 modifier = Modifier.padding(start = 5.dp, end = 5.dp)
@@ -171,4 +170,5 @@ fun ArticleCard(
             Spacer(modifier = Modifier.height(5.dp))
         }
     }
+
 }

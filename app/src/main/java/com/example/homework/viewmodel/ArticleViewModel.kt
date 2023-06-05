@@ -30,4 +30,5 @@ class ArticleViewModel {
 //        Log.i("============", tmpList.size.toString())
         loading = false
     }
+
 }
