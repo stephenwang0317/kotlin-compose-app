@@ -1,7 +1,7 @@
 package com.wjm.springmvc.bean;
 
 public class BaseResponse {
-    Integer code = 0;
+    Integer code = -1;
     String msg = "";
 
     public Integer getCode() {

@@ -5,8 +5,8 @@ public class Comment {
     public Integer cmt_id;
     public Integer cmt_art_id;
     public Integer cmt_author;
+    public String cmt_author_name;
     public String cmt_content;
-
     public String cmt_time;
 
     public Comment() {
@@ -18,6 +18,15 @@ public class Comment {
 
     public void setCmt_id(Integer cmt_id) {
         this.cmt_id = cmt_id;
+    }
+
+    public Comment(Integer cmt_id, Integer cmt_art_id, Integer cmt_author, String cmt_author_name, String cmt_content, String cmt_time) {
+        this.cmt_id = cmt_id;
+        this.cmt_art_id = cmt_art_id;
+        this.cmt_author = cmt_author;
+        this.cmt_author_name = cmt_author_name;
+        this.cmt_content = cmt_content;
+        this.cmt_time = cmt_time;
     }
 
     public Integer getCmt_art_id() {
@@ -52,11 +61,11 @@ public class Comment {
         this.cmt_time = cmt_time;
     }
 
-    public Comment(Integer cmt_id, Integer cmt_art_id, Integer cmt_author, String cmt_content, String cmt_time) {
-        this.cmt_id = cmt_id;
-        this.cmt_art_id = cmt_art_id;
-        this.cmt_author = cmt_author;
-        this.cmt_content = cmt_content;
-        this.cmt_time = cmt_time;
+    public String getCmt_author_name() {
+        return cmt_author_name;
+    }
+
+    public void setCmt_author_name(String cmt_author_name) {
+        this.cmt_author_name = cmt_author_name;
     }
 }

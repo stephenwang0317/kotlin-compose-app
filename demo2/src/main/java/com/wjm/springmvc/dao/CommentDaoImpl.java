@@ -1,7 +1,6 @@
 package com.wjm.springmvc.dao;
 
-import com.wjm.springmvc.bean.Article;
-import com.wjm.springmvc.bean.User;
+import com.wjm.springmvc.bean.Comment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -16,58 +15,47 @@ import java.util.Date;
 import java.util.List;
 
 @Repository
-public class ArticleDaoImpl implements ArticleDao {
+public class CommentDaoImpl implements CommentDao {
     @Autowired
     JdbcTemplate jdbcTemplate;
 
     @Override
-    public List<Article> getAllArticle() {
-        List<Article> ret;
-        String sql = "select * from Article";
+    public List<Comment> getCommentOfArticle(Integer articleId) {
+        List<Comment> ret;
+        String sql = "select * from Comment where cmt_art_id = ?";
         ret = jdbcTemplate.query(sql,
-                new BeanPropertyRowMapper<>(Article.class));
+                new BeanPropertyRowMapper<>(Comment.class), articleId);
         return ret;
     }
 
     @Override
-    public List<Article> getUserArticle(Integer user_id) {
-        List<Article> ret;
-        String sql = "select * from Article where art_author=?";
+    public List<Comment> getCommentOfUser(Integer userId) {
+        List<Comment> ret;
+        String sql = "select * from Comment where cmt_author = ?";
         ret = jdbcTemplate.query(sql,
-                new BeanPropertyRowMapper<>(Article.class), user_id);
+                new BeanPropertyRowMapper<>(Comment.class), userId);
         return ret;
     }
 
     @Override
-    public boolean addArticle(Article a) {
-        if (a.getArt_content().length() > 50) {
-            a.setArt_summary(a.getArt_content().substring(0, 44) + " ...");
-        } else {
-            a.setArt_summary(a.getArt_content());
-        }
-
+    public Boolean createComment(Comment c) {
         Timestamp timestamp = new Timestamp(new Date().getTime());
-        String sql = "insert into Article value(null,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO Comment VALUE(null,?,?,?,?,?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         int row = jdbcTemplate.update(new PreparedStatementCreator() {
             @Override
             public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
                 PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-                ps.setInt(1, a.getArt_author());
-                ps.setString(2, a.getArt_title());
-                ps.setString(3, a.getArt_content());
+                ps.setInt(1, c.getCmt_art_id());
+                ps.setInt(2, c.getCmt_author());
+                ps.setString(3, c.getCmt_content());
                 ps.setTimestamp(4, timestamp);
-                ps.setString(5, a.getArt_summary());
-                ps.setInt(6, a.getArt_like());
-                ps.setString(7,a.getArt_author_name());
+                ps.setString(5, c.getCmt_author_name());
                 return ps;
             }
         }, keyHolder);
-
-        a.setArt_time(timestamp.toString());
-
-        int newid = keyHolder.getKey().intValue();
-        a.setArt_id(newid);
+        c.setCmt_time(timestamp.toString());
+        c.setCmt_id(keyHolder.getKey().intValue());
         return row == 1;
     }
 }
