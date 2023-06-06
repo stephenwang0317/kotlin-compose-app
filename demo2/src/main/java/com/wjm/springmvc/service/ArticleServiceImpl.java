@@ -41,6 +41,21 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
+    public Article getArticleById(Integer art_id) {
+        return articleDao.getArticleById(art_id);
+    }
+
+    @Override
+    public boolean articleLikePlus(Integer art_id) {
+        return articleDao.articleLikePlus(art_id);
+    }
+
+    @Override
+    public boolean articleLikeMinus(Integer art_id) {
+        return articleDao.articleLikeMinus(art_id);
+    }
+
+    @Override
     public boolean addArticle(Article a) {
         return articleDao.addArticle(a);
     }

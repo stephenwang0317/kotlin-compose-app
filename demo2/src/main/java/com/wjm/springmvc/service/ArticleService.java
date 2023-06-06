@@ -11,4 +11,9 @@ public interface ArticleService {
     ListResponse<Article> getUserArticles(Integer user_id);
 
     boolean addArticle(Article a);
+
+    Article getArticleById(Integer art_id);
+
+    boolean articleLikePlus(Integer art_id);
+    boolean articleLikeMinus(Integer art_id);
 }

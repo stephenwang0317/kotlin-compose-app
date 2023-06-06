@@ -1,6 +1,7 @@
 package com.wjm.springmvc.dao;
 
 import com.wjm.springmvc.bean.Article;
+import com.wjm.springmvc.bean.ListResponse;
 import com.wjm.springmvc.bean.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -39,6 +40,32 @@ public class ArticleDaoImpl implements ArticleDao {
     }
 
     @Override
+    public boolean articleLikePlus(Integer art_id) {
+        String sql = "update Article set art_like=art_like+1 where art_id = ?";
+        int ret = jdbcTemplate.update(sql, art_id);
+        return ret == 1;
+    }
+
+    @Override
+    public boolean articleLikeMinus(Integer art_id) {
+        String sql = "update Article set art_like=art_like-1 where art_id = ?";
+        int ret = jdbcTemplate.update(sql, art_id);
+        return ret == 1;
+    }
+
+    @Override
+    public Article getArticleById(Integer art_id) {
+        String sql = "select * from Article where art_id=?";
+        try {
+            Article article = jdbcTemplate.queryForObject(sql,
+                    new BeanPropertyRowMapper<>(Article.class), art_id);
+            return article;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    @Override
     public boolean addArticle(Article a) {
         if (a.getArt_content().length() > 50) {
             a.setArt_summary(a.getArt_content().substring(0, 44) + " ...");
@@ -59,7 +86,7 @@ public class ArticleDaoImpl implements ArticleDao {
                 ps.setTimestamp(4, timestamp);
                 ps.setString(5, a.getArt_summary());
                 ps.setInt(6, a.getArt_like());
-                ps.setString(7,a.getArt_author_name());
+                ps.setString(7, a.getArt_author_name());
                 return ps;
             }
         }, keyHolder);

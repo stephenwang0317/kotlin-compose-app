@@ -22,4 +22,9 @@ public class BaseResponse {
 
     public BaseResponse() {
     }
+
+    public BaseResponse(Integer code, String msg) {
+        this.code = code;
+        this.msg = msg;
+    }
 }
