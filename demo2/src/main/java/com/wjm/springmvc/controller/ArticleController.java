@@ -50,11 +50,11 @@ public class ArticleController {
     @ResponseBody
     BaseResponse userLikeArticle(
             @PathVariable Integer user_id,
-            @PathVariable Integer art_id){
+            @PathVariable Integer art_id) {
         boolean f1 = articleService.articleLikePlus(art_id);
         boolean f2 = likeService.userLikeArticle(user_id, art_id);
-        if (f1 && f2){
-            return new BaseResponse(0,"success");
+        if (f1 && f2) {
+            return new BaseResponse(0, "success");
         } else {
             return new BaseResponse();
         }
@@ -65,13 +65,26 @@ public class ArticleController {
     BaseResponse userDislikeArticle(
             @PathVariable Integer user_id,
             @PathVariable Integer art_id
-    ){
+    ) {
         boolean f1 = articleService.articleLikeMinus(art_id);
         boolean f2 = likeService.userDisLikeArticle(user_id, art_id);
-        if(f1 && f2){
+        if (f1 && f2) {
             return new BaseResponse(0, "success");
         } else {
             return new BaseResponse();
+        }
+    }
+
+    @GetMapping("/{user_id}/{art_id}")
+    @ResponseBody
+    BaseResponse checkIfLike(
+            @PathVariable Integer user_id,
+            @PathVariable Integer art_id
+    ) {
+        if (likeService.checkIfLike(user_id, art_id)) {
+            return new BaseResponse(2, "yes");
+        } else {
+            return new BaseResponse(2, "no");
         }
     }
 }

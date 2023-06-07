@@ -18,4 +18,9 @@ public class LikeServiceImpl implements LikeService {
     public boolean userDisLikeArticle(Integer user_id, Integer art_id) {
         return likeDao.dislike(user_id, art_id);
     }
+
+    @Override
+    public boolean checkIfLike(Integer user_id, Integer art_id) {
+        return likeDao.checkIfLike(user_id, art_id);
+    }
 }
