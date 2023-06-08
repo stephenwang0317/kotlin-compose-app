@@ -168,6 +168,7 @@ fun HomePage(
     }
 }
 
+@ExperimentalMaterialApi
 @Composable
 fun HotPage(
     modifier: Modifier = Modifier,

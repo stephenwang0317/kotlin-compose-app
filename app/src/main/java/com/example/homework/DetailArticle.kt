@@ -1,39 +1,41 @@
 package com.example.homework
 
-import android.telecom.Call
 import android.util.Log
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.outlined.Favorite
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.homework.component.MyTopAppBar
 import com.example.homework.compositionLocal.LocalNavController
 import com.example.homework.compositionLocal.LocalUserViewModel
+import com.example.homework.model.entity.CommentItem
 import com.example.homework.model.entity.UserModel
 import com.example.homework.ui.theme.Purple500
 import com.example.homework.viewmodel.ArticleItemViewModel
-import com.example.homework.viewmodel.UserViewModel
+import com.example.homework.viewmodel.CommentViewModel
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
-@Preview(showBackground = true)
 @Composable
 fun DetailArticle(
     modifier: Modifier = Modifier,
@@ -41,12 +43,24 @@ fun DetailArticle(
 ) {
     val coroutineScope = rememberCoroutineScope()
     val navHostController = LocalNavController.current
-    val userViewModel = LocalUserViewModel.current
+    val scollState = rememberLazyListState()
 
-    val viewModel = ArticleItemViewModel()
+    val userViewModel = LocalUserViewModel.current
+    val artViewModel = ArticleItemViewModel()
+    val comViewModel = CommentViewModel()
+
+
     LaunchedEffect(Unit) {
-        viewModel.getArtById(art_id = art_id ?: 0)
-        viewModel.checkIfLike(art_id = art_id ?: 0, user_id = userViewModel.userInfo?.userId ?: 0)
+        async { artViewModel.getArtById(art_id = art_id ?: 0) }
+        async {
+            artViewModel.checkIfLike(
+                art_id = art_id ?: 0,
+                user_id = userViewModel.userInfo?.userId ?: 0
+            )
+        }
+        async {
+            comViewModel.getCommentOfArticle(art_id = art_id ?: 0)
+        }
     }
 
     Scaffold(
@@ -62,45 +76,54 @@ fun DetailArticle(
                 }
             )
         }
-    ) {
-        if (viewModel.loading) {
-            Column(
-                modifier = modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                CircularProgressIndicator(
-                    modifier = Modifier.size(100.dp),
-                    color = Purple500
-                )
-            }
-        } else {
-            Column(
-                modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState()),
-            ) {
-                DetailContent(
-                    viewModel = viewModel,
-                    art_id = art_id,
-                    usrModel = userViewModel.userInfo ?: UserModel()
-                )
-                Row(
-                    modifier = Modifier.padding(
-                        start = 5.dp,
-                        end = 5.dp,
-                        top = 10.dp,
-                        bottom = 10.dp
-                    ),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Divider(thickness = 5.dp, modifier = Modifier.weight(1f))
-                    Text(text = "The End", fontWeight = FontWeight.Bold, fontSize = 20.sp)
-                    Divider(thickness = 5.dp, modifier = Modifier.weight(1f))
+    ) { padding ->
+
+        LazyColumn(
+            contentPadding = padding,
+            state = scollState,
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+            content = {
+                item {
+                    DetailContent(
+                        viewModel = artViewModel,
+                        art_id = art_id,
+                        usrModel = userViewModel.userInfo ?: UserModel(),
+                        cmtViewModel = comViewModel
+                    )
+                }
+
+                if (comViewModel.loading) {
+                    item { CircularProgressIndicator() }
+                } else {
+                    itemsIndexed(
+                        comViewModel.comList,
+                    ) { index, item ->
+                        CommentBox(
+                            comment = item,
+                            modifier = Modifier.fillMaxWidth(),
+                            index = index
+                        )
+                    }
+                }
+
+                item {
+                    Row(
+                        modifier = Modifier.padding(
+                            start = 5.dp,
+                            end = 5.dp,
+                            top = 10.dp,
+                            bottom = 10.dp
+                        ),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Divider(thickness = 5.dp, modifier = Modifier.weight(1f))
+                        Text(text = "The End", fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                        Divider(thickness = 5.dp, modifier = Modifier.weight(1f))
+                    }
                 }
             }
-        }
+        )
     }
 }
 
@@ -109,12 +132,11 @@ fun DetailContent(
     modifier: Modifier = Modifier,
     viewModel: ArticleItemViewModel,
     art_id: Int?,
-    usrModel: UserModel
+    usrModel: UserModel,
+    cmtViewModel: CommentViewModel
 ) {
 
     val coroutineScope = rememberCoroutineScope()
-
-    Log.i("***********", viewModel.artItem.toString())
 
     Column(
         modifier = modifier
@@ -141,7 +163,7 @@ fun DetailContent(
             Text(text = viewModel.artItem.artAuthorName ?: "")
             Spacer(modifier = Modifier.width(10.dp))
             Icon(Icons.Default.Schedule, null)
-            Text(text = viewModel.artItem.artTime ?: "0000-00-00 00:00:00")
+            Text(text = viewModel.artItem.artTime ?: "1900-00-00 00:00:00")
         }
 
         Row(modifier = Modifier.padding(start = 5.dp, bottom = 10.dp)) {
@@ -212,8 +234,8 @@ fun DetailContent(
         )
 
         OutlinedTextField(
-            value = "",
-            onValueChange = {},
+            value = cmtViewModel.content,
+            onValueChange = { cmtViewModel.content = it },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(100.dp)
@@ -232,7 +254,70 @@ fun DetailContent(
                     Text(text = "评论", fontSize = 20.sp)
                 }
             },
+            trailingIcon = {
+                if (!cmtViewModel.postLoading) {
+                    Icon(
+                        imageVector = Icons.Default.Send,
+                        contentDescription = null,
+                        modifier = Modifier.clickable {
+                            coroutineScope.launch {
+                                cmtViewModel.postComment(
+                                    art_id = art_id ?: 0,
+                                    userModel = usrModel
+                                )
+                            }
+                        },
+                        tint = Color.Blue
+                    )
+                } else {
+                    CircularProgressIndicator()
+                }
+            }
         )
     }
 
+}
+
+@Composable
+fun CommentBox(
+    modifier: Modifier = Modifier,
+    comment: CommentItem,
+    index: Int
+) {
+    Log.i("=========comment", comment.toString())
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 5.dp, end = 5.dp),
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 10.dp, top = 10.dp)
+        ) {
+            Text(
+                text = comment.cmtAuthorName,
+                fontSize = 15.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            Text(text = comment.cmtTime ?: "1900-00-00 00:00:00", color = Color.Gray)
+            Text(
+                text = stringResource(id = R.string.floor_index, index + 1),
+                color = Color.Black,
+                fontWeight = FontWeight.Bold
+            )
+        }
+
+        Text(
+            text = comment.cmtContent,
+            fontStyle = FontStyle.Italic,
+        )
+
+        Divider(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 10.dp, bottom = 3.dp), thickness = 1.dp, color = Color.DarkGray
+        )
+    }
 }

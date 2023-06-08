@@ -13,7 +13,7 @@ class ArticleViewModel {
 
     private val articleService = ArticleService.instance()
 
-     val tmpList = mutableListOf<ArticleModelItem>()
+    val tmpList = mutableListOf<ArticleModelItem>()
 
     var loading by mutableStateOf(false)
         private set
