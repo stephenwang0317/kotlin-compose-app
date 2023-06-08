@@ -45,7 +45,7 @@ public class LikeDaoImpl implements LikeDao {
 
     @Override
     public List<Integer> getUserLike(Integer user_id) {
-        String sql = "select like_id from Likes where user_id=?";
+        String sql = "select art_id from Likes where user_id=?";
         List<Integer> ret = new ArrayList<>();
         try {
             ret = jdbcTemplate.queryForList(sql, Integer.class, user_id);
