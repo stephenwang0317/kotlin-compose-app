@@ -10,6 +10,8 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -54,7 +56,11 @@ public class CommentDaoImpl implements CommentDao {
                 return ps;
             }
         }, keyHolder);
-        c.setCmt_time(timestamp.toString());
+
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String dateNow= df.format(timestamp);
+        c.setCmt_time(dateNow);
+
         c.setCmt_id(keyHolder.getKey().intValue());
         return row == 1;
     }

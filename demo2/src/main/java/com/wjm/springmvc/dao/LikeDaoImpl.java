@@ -1,11 +1,15 @@
 package com.wjm.springmvc.dao;
 
 import com.wjm.springmvc.bean.Article;
+import org.apache.commons.logging.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Repository
 public class LikeDaoImpl implements LikeDao {
@@ -36,6 +40,18 @@ public class LikeDaoImpl implements LikeDao {
             return true;
         } catch (DataAccessException e) {
             return false;
+        }
+    }
+
+    @Override
+    public List<Integer> getUserLike(Integer user_id) {
+        String sql = "select like_id from Likes where user_id=?";
+        List<Integer> ret = new ArrayList<>();
+        try {
+            ret = jdbcTemplate.queryForList(sql, Integer.class, user_id);
+            return ret;
+        } catch (DataAccessException e) {
+            return ret;
         }
     }
 }

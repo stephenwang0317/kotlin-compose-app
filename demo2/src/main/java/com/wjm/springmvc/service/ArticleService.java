@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface ArticleService {
     ListResponse<Article> getAllArticles();
+    ListResponse<Article> getListArticles(List<Integer> list);
     ListResponse<Article> getUserArticles(Integer user_id);
 
     boolean addArticle(Article a);

@@ -7,6 +7,7 @@ import com.wjm.springmvc.dao.ArticleDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -58,5 +59,21 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public boolean addArticle(Article a) {
         return articleDao.addArticle(a);
+    }
+
+    @Override
+    public ListResponse<Article> getListArticles(List<Integer> list) {
+        List<Article> articles = new ArrayList<>();
+        for (Integer id : list) {
+            Article t = getArticleById(id);
+            articles.add(t);
+        }
+        ListResponse<Article> ret = new ListResponse<>();
+        ret.setCode(0);
+        ret.setMsg("success");
+        ret.setType(Article.class.getTypeName());
+        ret.setLen(articles.size());
+        ret.setList(articles);
+        return ret;
     }
 }
