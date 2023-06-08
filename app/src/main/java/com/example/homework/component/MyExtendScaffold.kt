@@ -22,7 +22,8 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun MyExtendScaffold(
-    content: @Composable (PaddingValues)->Unit
+    title: String = "首页",
+    content: @Composable (PaddingValues)->Unit,
 ){
     val navHostController = LocalNavController.current
     val scaffoldState = rememberScaffoldState()
@@ -32,7 +33,7 @@ fun MyExtendScaffold(
         scaffoldState = scaffoldState,
         topBar = {
             MyTopAppBar(
-                titleText = "首页",
+                titleText = title,
                 icon = Icons.Default.Menu,
             ){
                 coroutineScope.launch {

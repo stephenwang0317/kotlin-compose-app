@@ -26,8 +26,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.homework.component.MyTopAppBar
 import com.example.homework.compositionLocal.LocalNavController
+import com.example.homework.compositionLocal.LocalUserViewModel
+import com.example.homework.model.entity.UserModel
 import com.example.homework.ui.theme.Purple500
 import com.example.homework.viewmodel.ArticleItemViewModel
+import com.example.homework.viewmodel.UserViewModel
 import kotlinx.coroutines.launch
 
 @Preview(showBackground = true)
@@ -38,10 +41,12 @@ fun DetailArticle(
 ) {
     val coroutineScope = rememberCoroutineScope()
     val navHostController = LocalNavController.current
+    val userViewModel = LocalUserViewModel.current
 
     val viewModel = ArticleItemViewModel()
     LaunchedEffect(Unit) {
         viewModel.getArtById(art_id = art_id ?: 0)
+        viewModel.checkIfLike(art_id = art_id ?: 0, user_id = userViewModel.userInfo?.userId ?: 0)
     }
 
     Scaffold(
@@ -75,7 +80,11 @@ fun DetailArticle(
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState()),
             ) {
-                DetailContent(viewModel = viewModel)
+                DetailContent(
+                    viewModel = viewModel,
+                    art_id = art_id,
+                    usrModel = userViewModel.userInfo ?: UserModel()
+                )
                 Row(
                     modifier = Modifier.padding(
                         start = 5.dp,
@@ -98,11 +107,11 @@ fun DetailArticle(
 @Composable
 fun DetailContent(
     modifier: Modifier = Modifier,
-    viewModel: ArticleItemViewModel
+    viewModel: ArticleItemViewModel,
+    art_id: Int?,
+    usrModel: UserModel
 ) {
-    var isLike by remember {
-        mutableStateOf(false)
-    }
+
     val coroutineScope = rememberCoroutineScope()
 
     Log.i("***********", viewModel.artItem.toString())
@@ -158,28 +167,44 @@ fun DetailContent(
         )
 
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-            Icon(
-                imageVector =
-                if (!isLike)
-                    ImageVector.vectorResource(id = R.drawable.heart_plus)
-                else
-                    ImageVector.vectorResource(id = R.drawable.heart_check),
-                contentDescription = null,
-                tint = Color.Red,
-                modifier = Modifier
-                    .size(50.dp, 50.dp)
-                    .clickable {
-                        if (!isLike) {
-//                                Log.i(">>>>>>>>>>", viewModel.artItem!!.artLike.toString())
-                            coroutineScope.launch { viewModel.like(user_id = 0) }
-//                                Log.i(">>>>>>>>>>", viewModel.artItem!!.artLike.toString())
-                        } else {
-                            coroutineScope.launch { viewModel.dislike(user_id = 0) }
+            if (viewModel.isLike == 0)
+                CircularProgressIndicator()
+            else {
+                Icon(
+                    imageVector =
+                    if (viewModel.isLike == -1)
+                        ImageVector.vectorResource(id = R.drawable.heart_plus)
+                    else
+                        ImageVector.vectorResource(id = R.drawable.heart_check),
+                    contentDescription = null,
+                    tint = Color.Red,
+                    modifier = Modifier
+                        .size(50.dp, 50.dp)
+                        .clickable {
+                            when (viewModel.isLike) {
+                                -1 -> {
+                                    coroutineScope.launch {
+                                        viewModel.like(
+                                            user_id = usrModel.userId ?: 0,
+                                            art_id = art_id ?: 0
+                                        )
+                                    }
+                                }
+                                1 -> {
+                                    coroutineScope.launch {
+                                        viewModel.dislike(
+                                            user_id = usrModel.userId ?: 0,
+                                            art_id = art_id ?: 0
+                                        )
+                                    }
+                                }
+                                else -> {}
+                            }
                         }
-                        isLike = !isLike
-                    }
-            )
+                )
+            }
         }
+
         Divider(
             modifier = Modifier
                 .fillMaxWidth()

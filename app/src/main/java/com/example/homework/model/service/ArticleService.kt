@@ -2,6 +2,7 @@ package com.example.homework.model.service
 
 import com.example.homework.model.entity.ArticleModel
 import com.example.homework.model.entity.ArticleModelItem
+import com.example.homework.model.entity.BaseResponse
 import com.example.homework.network.Network
 import retrofit2.http.*
 
@@ -18,8 +19,26 @@ interface ArticleService {
 
     @GET("article/{art_id}")
     suspend fun getArtById(
-        @Path("art_id") art_id:Int
+        @Path("art_id") art_id: Int
     ): ArticleModelItem
+
+    @PUT("article/{user_id}/{art_id}")
+    suspend fun like(
+        @Path("user_id") user_id: Int,
+        @Path("art_id") art_id: Int
+    ):BaseResponse
+
+    @DELETE("article/{user_id}/{art_id}")
+    suspend fun dislike(
+        @Path("user_id") user_id: Int,
+        @Path("art_id") art_id: Int
+    ):BaseResponse
+
+    @GET("article/{user_id}/{art_id}")
+    suspend fun checkIfLike(
+        @Path("user_id") user_id: Int,
+        @Path("art_id") art_id: Int
+    ):BaseResponse
 
     companion object {
         fun instance(): ArticleService {

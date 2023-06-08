@@ -17,26 +17,46 @@ class ArticleItemViewModel {
     var loading by mutableStateOf(true)
         private set
 
+    // 0: not sure/loading
+    // 1: like
+    // -1: dislike
+    var isLike: Int by mutableStateOf(0)
+
     suspend fun getArtById(art_id: Int) {
         loading = true
         delay(500)
         val res = articleService.getArtById(art_id)
-//        Log.i("++++++++++++", res.toString())
         artItem = res
         loading = false
     }
 
-    suspend fun like(user_id: Int) {
-        loading = true
-//        delay(500)
-        artItem.artLike += 1
-        loading = false
+    suspend fun checkIfLike(art_id: Int, user_id: Int) {
+        isLike = 0
+        delay(1000)
+        val res = articleService.checkIfLike(art_id = art_id, user_id = user_id)
+        if (res.code == 2) {
+            if (res.msg == "yes") isLike = 1;
+            else if (res.msg == "no") isLike = -1;
+        }
     }
 
-    suspend fun dislike(user_id: Int){
-        loading = true
+    suspend fun like(user_id: Int, art_id: Int) {
+        isLike = 0
 //        delay(500)
-        artItem.artLike -= 1
-        loading = false
+        val res = articleService.like(user_id = user_id, art_id = art_id)
+        if (res.code == 0) {
+            artItem.artLike += 1
+        }
+        isLike = 1
+    }
+
+    suspend fun dislike(user_id: Int, art_id: Int) {
+        isLike = 0
+//        delay(500)
+        val res = articleService.dislike(user_id = user_id, art_id = art_id)
+        if (res.code == 0) {
+            artItem.artLike -= 1
+        }
+        isLike = -1
     }
 }
