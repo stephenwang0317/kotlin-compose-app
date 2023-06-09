@@ -12,4 +12,6 @@ public interface UserService {
     public List<User> getAllUsers();
 
     public User login(User user);
+
+    public User changeUserInfo(User user);
 }

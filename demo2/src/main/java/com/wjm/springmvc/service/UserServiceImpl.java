@@ -34,4 +34,14 @@ public class UserServiceImpl implements UserService{
             return queryUser;
         }
     }
+
+    @Override
+    public User changeUserInfo(User user) {
+        int rows = userDao.changeInfo(user);
+        if (rows == 0) {
+            return new User();
+        } else {
+            return userDao.searchUserById(user.getUser_id());
+        }
+    }
 }

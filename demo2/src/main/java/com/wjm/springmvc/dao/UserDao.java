@@ -11,4 +11,6 @@ public interface UserDao {
 
     public User loginUser(User user);
 
+    public Integer changeInfo(User user);
+
 }

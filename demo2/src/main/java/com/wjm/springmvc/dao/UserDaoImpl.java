@@ -2,6 +2,7 @@ package com.wjm.springmvc.dao;
 
 import com.wjm.springmvc.bean.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -23,16 +24,13 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User searchUserById(Integer id) {
-//        System.out.println(id);
         String sql = "select * from User where user_id=?";
         try {
-//            System.out.println("in try");
             User user = jdbcTemplate.queryForObject(sql,
                     new BeanPropertyRowMapper<>(User.class), id);
             System.out.println(user);
             return user;
         } catch (Exception e) {
-//            System.out.println("in catch");
             return null;
         }
     }
@@ -78,5 +76,15 @@ public class UserDaoImpl implements UserDao {
             return null;
         }
 
+    }
+
+    @Override
+    public Integer changeInfo(User user) {
+        String sql = "update User set user_name=?,user_pwd=? where user_id=?";
+        try {
+            return jdbcTemplate.update(sql, user.getUser_name(), user.getUser_pwd(), user.getUser_id());
+        } catch (DataAccessException e) {
+            return 0;
+        }
     }
 }
