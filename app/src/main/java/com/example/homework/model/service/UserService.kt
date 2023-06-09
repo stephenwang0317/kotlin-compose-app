@@ -25,6 +25,12 @@ interface UserService {
         @Body user: UserModel
     ): UserModel
 
+    @Headers("Content-Type: application/json;charset=UTF-8")
+    @PUT("user/")
+    suspend fun changeInfo(
+        @Body user: UserModel
+    ): UserModel
+
     companion object {
         fun instance(): UserService {
             return Network.createService(UserService::class.java)
