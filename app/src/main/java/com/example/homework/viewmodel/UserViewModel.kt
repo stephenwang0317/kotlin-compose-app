@@ -78,6 +78,8 @@ class UserViewModel(context: Context) : ViewModel() {
         } else {
 
         }
+        password = ""
+        account = ""
         loading = false
     }
 
@@ -103,6 +105,33 @@ class UserViewModel(context: Context) : ViewModel() {
         } else {
 
         }
+        loading = false
+    }
+
+    suspend fun changeInfo(savePassword: Boolean) {
+        loading = true
+
+        userInfoManager.clear()
+        val temp = UserModel(
+            userId = userInfo?.userId,
+            userAvatar = userInfo?.userAvatar,
+            userPwd = password,
+            userName = username
+        )
+        val res = userService.changeInfo(temp)
+        if (res.userName != null) {
+            userInfo = res
+            if (savePassword) {
+                userInfoManager.save(
+                    userName = res.userName ?: "",
+                    userId = res.userId ?: 0,
+                    userAva = res.userAvatar ?: ""
+                )
+            }
+        }
+
+        username = ""
+        password = ""
         loading = false
     }
 

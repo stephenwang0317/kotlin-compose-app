@@ -16,11 +16,15 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -29,6 +33,7 @@ import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.example.homework.R
 import com.example.homework.model.entity.baiduhot.Content
+import com.example.homework.model.entity.baiduhot.TopContent
 
 @ExperimentalCoilApi
 @ExperimentalMaterialApi
@@ -134,6 +139,90 @@ fun HotCard(
                     )
 
                 }
+            }
+        }
+    }
+}
+
+@ExperimentalCoilApi
+@ExperimentalMaterialApi
+@Composable
+fun TopHotCard(
+    modifier: Modifier = Modifier,
+    content: TopContent
+) {
+    val uri: Uri = Uri.parse(content.rawUrl)
+    val context = LocalContext.current
+
+    Card(
+        enabled = true,
+        onClick = {
+            val intent: Intent = Intent(Intent.ACTION_VIEW, uri)
+            context.startActivity(Intent.createChooser(intent, "选择浏览器"))
+        },
+        modifier = Modifier
+            .padding(2.dp),
+        elevation = 2.dp,
+    ) {
+        Column(modifier = Modifier.fillMaxWidth()) {
+            Box() {
+                Image(
+                    painter = rememberImagePainter(
+                        data = content.img,
+                        builder = {
+                            placeholder(R.drawable.ic_launcher_background)
+                        }
+                    ),
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(150.dp)
+                        .padding(top = 5.dp, bottom = 5.dp)
+                        .clip(RoundedCornerShape(5)),
+                )
+                Icon(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.top),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(50.dp, 50.dp)
+                        .padding(top = 8.dp),
+                    tint = Color.Red
+                )
+            }
+            Text(
+                text = content.word,
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp,
+                modifier = Modifier.padding(
+                    top = 10.dp, bottom = 10.dp
+                ),
+            )
+            Text(
+                text = content.desc,
+                fontSize = 16.sp
+            )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        top = 10.dp
+                    ),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.Default.ThumbUp,
+                    contentDescription = null,
+                    modifier = Modifier.size(13.dp, 13.dp),
+                    tint = Color.Red
+                )
+                Text(
+                    text = stringResource(id = R.string.hot_rate, content.hotScore),
+                    fontSize = 12.sp,
+                    fontFamily = FontFamily.Monospace,
+                    fontStyle = FontStyle.Italic
+                )
+
             }
         }
     }

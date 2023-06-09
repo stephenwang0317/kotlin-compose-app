@@ -6,7 +6,7 @@ import com.squareup.moshi.JsonClass
 
 //class ArticleModel : ArrayList<ArticleModelItem>()
 data class ArticleModel(
-    var list: List<ArticleModelItem>?,
+    var list: List<ArticleModelItem?>?,
     val code: Int = 0,
     val msg: String = "",
     val len: Int = 0,

@@ -25,9 +25,43 @@ class ArticleViewModel {
 //        Log.i("============", tmpList.size.toString())
 //        Log.i("============code", res.code.toString())
         if (res.code == 0) {
-            tmpList.addAll(res.list ?: Collections.emptyList())
+            res.list?.forEach {
+                if (it != null) tmpList.add(it)
+            }
         }
 //        Log.i("============", tmpList.size.toString())
+        loading = false
+    }
+
+    suspend fun getUserArticle(user_id: Int) {
+        loading = true
+
+        val res = articleService.getUserArticle(user_id = user_id)
+        Log.i(">>>>>>>>>>", res.toString())
+        if (res.code == 0) {
+            if (res.code == 0) {
+                res.list?.forEach {
+                    if (it != null) tmpList.add(it)
+                }
+            }
+        }
+
+        loading = false
+    }
+
+    suspend fun getUserLike(user_id: Int) {
+        loading = true
+
+        val res = articleService.getUserLike(user_id)
+        Log.i(">>>>>>>>>>", res.toString())
+        if (res.code == 0) {
+            if (res.code == 0) {
+                res.list?.forEach {
+                    if (it != null) tmpList.add(it)
+                }
+            }
+        }
+
         loading = false
     }
 

@@ -2,12 +2,11 @@ package com.example.homework.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Button
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Divider
-import androidx.compose.material.Text
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
@@ -20,8 +19,10 @@ import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.homework.LoginView
 import com.example.homework.R
 import com.example.homework.compositionLocal.LocalNavController
 import com.example.homework.compositionLocal.LocalUserViewModel
@@ -36,7 +37,7 @@ fun DrawerContent(
     val userViewModel = LocalUserViewModel.current
     val coroutineScope = rememberCoroutineScope()
     val navHostController = LocalNavController.current
-    
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -44,7 +45,57 @@ fun DrawerContent(
         DrawerHead(userViewModel = userViewModel, modifier = Modifier.fillMaxWidth())
         Spacer(modifier = Modifier.fillMaxHeight(0.02f))
         Divider(thickness = 2.dp, modifier = Modifier.fillMaxWidth(0.8f))
+        Spacer(modifier = Modifier.fillMaxHeight(0.05f))
+
+        MyText(text = "我的帖子", onclick = { navHostController.navigate("MyArticle") })
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Start
+        ) {
+            Divider(
+                color = Color.LightGray,
+                modifier = Modifier
+                    .fillMaxWidth(0.6f)
+                    .padding(top = 5.dp, bottom = 5.dp),
+                startIndent = 20.dp
+            )
+        }
+        MyText(text = "我的评论", onclick = { navHostController.navigate("MyComment") })
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Start
+        ) {
+            Divider(
+                color = Color.LightGray,
+                modifier = Modifier
+                    .fillMaxWidth(0.6f)
+                    .padding(top = 5.dp, bottom = 5.dp),
+                startIndent = 20.dp
+            )
+        }
+        MyText(text = "我的点赞", onclick = { navHostController.navigate("MyLike") })
+
         Spacer(modifier = Modifier.weight(1f))
+
+        Button(
+            onClick = {
+                coroutineScope.launch {
+                    navHostController.navigate("ChangeInfo")
+                }
+            },
+            enabled = !userViewModel.loading,
+            modifier = Modifier.padding(
+                start = 20.dp, end = 20.dp
+            ),
+            shape = RoundedCornerShape(5)
+        ) {
+            Text(
+                text = stringResource(id = R.string.change_info),
+            )
+            if (userViewModel.loading) {
+                CircularProgressIndicator(modifier = Modifier.size(20.dp))
+            }
+        }
 
         Button(
             onClick = {
@@ -54,7 +105,8 @@ fun DrawerContent(
                 }
             },
             enabled = !userViewModel.loading,
-            modifier = Modifier.padding(20.dp)
+            modifier = Modifier.padding(20.dp).width(90.dp),
+            shape = RoundedCornerShape(5)
         ) {
             Text(
                 text = stringResource(id = R.string.logout),
@@ -113,4 +165,42 @@ fun DrawerHead(
         }
         Spacer(modifier = Modifier.weight(1.0f))
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun MyText(
+    modifier: Modifier = Modifier,
+    text: String = "我的点赞",
+    onclick: () -> Unit = {}
+) {
+    Text(
+        text = text,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                start = 20.dp,
+                top = 10.dp,
+                bottom = 10.dp
+            )
+            .clickable { onclick() },
+        fontSize = 22.sp,
+        color = Color.Gray,
+        fontFamily = FontFamily.Cursive,
+        fontStyle = FontStyle.Italic
+    )
+}
+
+@Composable
+fun ChangeInfo(
+
+) {
+    val navHostController = LocalNavController.current
+    LoginView(
+        navHostController = navHostController,
+        titleId = R.string.change_info,
+        bottomTextId = R.string.back,
+        bottomTextClickFunc = { navHostController.popBackStack() },
+        isRegister = true
+    )
 }

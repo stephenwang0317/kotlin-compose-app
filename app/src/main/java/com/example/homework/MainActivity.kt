@@ -27,6 +27,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.homework.component.ChangeInfo
 import com.example.homework.compositionLocal.LocalNavController
 import com.example.homework.compositionLocal.LocalUserViewModel
 
@@ -91,9 +92,13 @@ fun Navigator() {
             composable(
                 route = "DetailArticle/{art_id}",
                 arguments = listOf(navArgument("art_id") { type = NavType.IntType })
-            ){
+            ) {
                 DetailArticle(art_id = it.arguments?.getInt("art_id"))
             }
+            composable("MyArticle") { ListOfArticles() }
+            composable("MyLike") { ListOfArticles(title = "我的点赞") }
+            composable("MyComment") { ListOfComments() }
+            composable("ChangeInfo") { ChangeInfo() }
         }
     }
 }

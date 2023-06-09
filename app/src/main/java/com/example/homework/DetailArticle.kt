@@ -26,6 +26,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.homework.component.CommentBox
 import com.example.homework.compositionLocal.LocalNavController
 import com.example.homework.compositionLocal.LocalUserViewModel
 import com.example.homework.model.entity.CommentItem
@@ -276,48 +277,4 @@ fun DetailContent(
         )
     }
 
-}
-
-@Composable
-fun CommentBox(
-    modifier: Modifier = Modifier,
-    comment: CommentItem,
-    index: Int
-) {
-    Log.i("=========comment", comment.toString())
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 5.dp, end = 5.dp),
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 10.dp, top = 10.dp)
-        ) {
-            Text(
-                text = comment.cmtAuthorName,
-                fontSize = 15.sp,
-                fontWeight = FontWeight.Bold
-            )
-            Spacer(modifier = Modifier.weight(1f))
-            Text(text = comment.cmtTime ?: "1900-00-00 00:00:00", color = Color.Gray)
-            Text(
-                text = stringResource(id = R.string.floor_index, index + 1),
-                color = Color.Black,
-                fontWeight = FontWeight.Bold
-            )
-        }
-
-        Text(
-            text = comment.cmtContent,
-            fontStyle = FontStyle.Italic,
-        )
-
-        Divider(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 10.dp, bottom = 3.dp), thickness = 1.dp, color = Color.DarkGray
-        )
-    }
 }
