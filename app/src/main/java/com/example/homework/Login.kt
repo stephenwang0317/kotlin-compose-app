@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
@@ -24,12 +25,9 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.material.*
-import androidx.compose.ui.focus.FocusManager
 import androidx.navigation.NavHostController
 import com.example.homework.component.alertDialog
 import com.example.homework.compositionLocal.LocalUserViewModel
-import com.example.homework.viewmodel.UserViewModel
 import kotlinx.coroutines.launch
 
 
@@ -211,15 +209,26 @@ fun LoginBox(
                         alertDialogType = 3
                         return@Button
                     } else {
-                        coroutineScope.launch {
-                            userViewModel.register(savePassword)
-                            if (userViewModel.userInfo?.userName != null) {
+                        // 注册
+                        if (titleId == R.string.register) {
+                            coroutineScope.launch {
+                                userViewModel.register(savePassword)
+                                if (userViewModel.userInfo?.userName != null) {
+                                    confirmPassword = ""
+                                    navHostController.navigate("HomePage") {
+                                        popUpTo("LoginPage") { inclusive = true }
+                                    }
+                                } else {
+                                    showAlertDialog = true
+                                    alertDialogType = 4
+                                }
+                            }
+                        } else {    // 修改信息
+                            coroutineScope.launch {
+                                userViewModel.changeInfo(savePassword)
                                 navHostController.navigate("HomePage") {
                                     popUpTo("LoginPage") { inclusive = true }
                                 }
-                            } else {
-                                showAlertDialog = true
-                                alertDialogType = 4
                             }
                         }
                     }
