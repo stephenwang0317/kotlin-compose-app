@@ -1,5 +1,6 @@
 package com.example.homework
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -18,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
 import com.example.homework.component.HotCard
 import com.example.homework.component.MyExtendScaffold
+import com.example.homework.component.TopHotCard
 import com.example.homework.compositionLocal.LocalNavController
 import com.example.homework.compositionLocal.LocalUserViewModel
 import com.example.homework.ui.theme.Purple500
@@ -92,9 +94,13 @@ fun hotContent(
         verticalArrangement = Arrangement.spacedBy(5.dp),
         state = scrollState,
         content = {
+            item {
+                if (hotViewModel.topContent.size > 0)
+                    TopHotCard(content = hotViewModel.topContent[0])
+            }
             items(
                 hotViewModel.contents
-            ){
+            ) {
                 HotCard(
                     content = it
                 )
