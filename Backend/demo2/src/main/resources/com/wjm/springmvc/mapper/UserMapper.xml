@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wjm.springmvc.mapper.UserMapper">
+
+    <!--    List<User> listAllUsers()   -->
+    <select id="listAllUsers" resultType="User">
+        select * from User
+    </select>
+
+    <!--    User searchUserById(Integer id);-->
+    <select id="searchUserById" resultType="User">
+        select *
+        from User
+        where user_id = #{id}
+    </select>
+
+    <!--    User login(@Param("id") Integer id, @Param("pwd") String pwd);-->
+    <select id="login" resultType="User">
+        select *
+        from User
+        where user_id = #{id}
+          and user_pwd = #{pwd}
+    </select>
+
+    <!--    Integer createUser(User user);-->
+    <insert id="createUser" parameterType="User" useGeneratedKeys="true" keyProperty="user_id">
+        insert into User value(null, #{user_name}, #{user_pwd}, #{user_avater})
+    </insert>
+</mapper>

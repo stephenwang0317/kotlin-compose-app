@@ -21,6 +21,8 @@ public class User {
         return "User{" +
                 "user_id=" + user_id +
                 ", user_name='" + user_name + '\'' +
+                ", user_pwd='" + user_pwd + '\'' +
+                ", user_avater='" + user_avater + '\'' +
                 '}';
     }
 
