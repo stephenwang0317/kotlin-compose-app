@@ -1,0 +1,6 @@
+/Android/build
+/Android/app/build
+/Android/app/release
+/Android/.gradle
+/Backend/.idea
+/Backend/demo2/target
