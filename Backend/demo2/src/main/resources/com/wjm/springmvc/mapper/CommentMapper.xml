@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wjm.springmvc.mapper.CommentMapper">
+    <!--    List<Comment> getCommentOfArticle(Integer articleId);-->
+    <select id="getCommentOfArticle" resultType="Comment">
+        select *
+        from Comment
+        where cmt_art_id = #{art_id}
+    </select>
+    <!--    List<Comment> getCommentOfUser(Integer userId);-->
+    <select id="getCommentOfUser" resultType="Comment">
+        select *
+        from Comment
+        where cmt_author = #{user_id}
+    </select>
+    <!--    Boolean createComment(Comment c);-->
+    <insert id="createComment" parameterType="Comment" useGeneratedKeys="true" keyProperty="cmt_id">
+        insert into Comment value (null, #{cmt_art_id}, #{cmt_author}, #{cmt_content}, #{cmt_time}, #{cmt_author_name})
+    </insert>
+</mapper>

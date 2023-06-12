@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wjm.springmvc.mapper.LikeMapper">
+
+    <!--    Integer like(Integer user_id, Integer art_id);-->
+    <insert id="like">
+        insert into Likes value(null, #{user_id}, #{art_id})
+    </insert>
+
+<!--    Integer dislike(@Param("user_id") Integer user_id, @Param("art_id") Integer art_id);-->
+    <delete id="dislike">
+        delete
+        from Likes
+        where user_id = #{user_id}
+          and art_id = #{art_id}
+    </delete>
+
+<!--    Integer checkIfLike(@Param("user_id") Integer user_id, @Param("art_id") Integer art_id);-->
+    <select id="checkIfLike" resultType="Integer">
+        select COUNT(*)
+        from Likes
+        where user_id = #{user_id}
+          and art_id = #{art_id}
+    </select>
+<!--    List<Integer> getUserLike(@Param("user_id") Integer user_id);-->
+    <select id="getUserLike" resultType="Integer">
+        select art_id
+        from Likes
+        where user_id = #{user_id}
+    </select>
+</mapper>

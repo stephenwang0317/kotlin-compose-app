@@ -7,6 +7,21 @@ public class Article {
     public Integer art_like;
     public String art_title;
     public String art_content;
+
+    @Override
+    public String toString() {
+        return "Article{" +
+                "art_id=" + art_id +
+                ", art_author=" + art_author +
+                ", art_author_name='" + art_author_name + '\'' +
+                ", art_like=" + art_like +
+                ", art_title='" + art_title + '\'' +
+                ", art_content='" + art_content + '\'' +
+                ", art_summary='" + art_summary + '\'' +
+                ", art_time='" + art_time + '\'' +
+                '}';
+    }
+
     public String art_summary;
     public String art_time;
 

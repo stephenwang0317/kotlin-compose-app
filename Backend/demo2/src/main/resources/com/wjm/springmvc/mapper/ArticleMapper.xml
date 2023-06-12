@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wjm.springmvc.mapper.ArticleMapper">
+
+<!--    List<Article> getAllArticle();-->
+        <select id="getAllArticle" resultType="Article">
+            select *
+            from Article
+        </select>
+
+<!--    List<Article> getUserArticle(Integer user_id);-->
+        <select id="getUserArticle" resultType="Article">
+            select *
+            from Article
+            where art_author = #{user_id}
+        </select>
+<!--    Article getArticleById(Integer art_id);-->
+        <select id="getArticleById" resultType="Article">
+            select *
+            from Article
+            where art_id = #{art_id}
+        </select>
+
+<!--    Integer addArticle(Article a);-->
+        <insert id="addArticle" parameterType="Article" useGeneratedKeys="true" keyProperty="art_id">
+            insert into Article
+                value (null, #{art_author}, #{art_title}, #{art_content}, #{art_time}, #{art_summary}, #{art_like},
+                       #{art_author_name})
+        </insert>
+<!--    Integer articleLikePlus(@Param("art_id") Integer art_id);-->
+        <update id="articleLikePlus">
+            update Article
+            set art_like=art_like + 1
+            where art_id = #{art_id}
+        </update>
+<!--    Integer articleLikeMinus(@Param("art_id") Integer art_id);-->
+        <update id="articleLikeMinus">
+            update Article
+            set art_like=art_like - 1
+            where art_id = #{art_id}
+        </update>
+</mapper>
