@@ -10,4 +10,5 @@ public interface UserMapper {
     User searchUserById(@Param("id") Integer id);
     User login(@Param("id") Integer id, @Param("pwd") String pwd);
     Integer createUser(User user);
+    Integer changeInfo(User user);
 }

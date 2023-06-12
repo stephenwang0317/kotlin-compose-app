@@ -21,11 +21,11 @@ public class Test {
         UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
 
         User insert = new User();
-        insert.setUser_name("Mybatis");
+        insert.setUser_id(100031);
+        insert.setUser_name("Changed name");
         insert.setUser_pwd("123455");
-        Integer line = userMapper.createUser(insert);
+        Integer line = userMapper.changeInfo(insert);
         System.out.println(line);
-        System.out.println(insert.getUser_id());
     }
 
 }

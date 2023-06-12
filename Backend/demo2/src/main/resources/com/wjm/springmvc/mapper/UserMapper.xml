@@ -6,7 +6,8 @@
 
     <!--    List<User> listAllUsers()   -->
     <select id="listAllUsers" resultType="User">
-        select * from User
+        select *
+        from User
     </select>
 
     <!--    User searchUserById(Integer id);-->
@@ -26,6 +27,14 @@
 
     <!--    Integer createUser(User user);-->
     <insert id="createUser" parameterType="User" useGeneratedKeys="true" keyProperty="user_id">
-        insert into User value(null, #{user_name}, #{user_pwd}, #{user_avater})
+        insert into User value (null, #{user_name}, #{user_pwd}, #{user_avater})
     </insert>
+
+    <!--    Integer changeInfo(User user);-->
+    <update id="changeInfo" parameterType="User">
+        update User
+        set user_name=#{user_name},
+            user_pwd=#{user_pwd}
+        where user_id = #{user_id}
+    </update>
 </mapper>
