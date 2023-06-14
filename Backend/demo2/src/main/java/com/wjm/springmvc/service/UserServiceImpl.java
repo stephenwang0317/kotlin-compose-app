@@ -1,47 +1,50 @@
 package com.wjm.springmvc.service;
 
 import com.wjm.springmvc.bean.User;
-import com.wjm.springmvc.dao.UserDao;
+import com.wjm.springmvc.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
     @Autowired
-    UserDao userDao;
+    UserMapper userMapper;
+
     @Override
     public User getUserById(Integer id) {
-        return userDao.searchUserById(id);
+        return userMapper.searchUserById(id);
     }
 
     @Override
     public User createUser(User user) {
-        return userDao.createUser(user);
+        Integer i = userMapper.createUser(user);
+        return user;
     }
 
     @Override
     public List<User> getAllUsers() {
-        return userDao.listAllUsers();
+        return userMapper.listAllUsers();
     }
 
     @Override
     public User login(User user) {
-        User queryUser = userDao.loginUser(user);
-        if(queryUser == null) {
+        User queryUser = userMapper.login(user.getUser_id(), user.getUser_pwd());
+        if (queryUser == null) {
             return new User();
-        }else {
+        } else {
             return queryUser;
         }
     }
 
     @Override
     public User changeUserInfo(User user) {
-        int rows = userDao.changeInfo(user);
+        int rows = userMapper.changeInfo(user);
         if (rows == 0) {
             return new User();
         } else {
-            return userDao.searchUserById(user.getUser_id());
+            return userMapper.searchUserById(user.getUser_id());
         }
     }
 }
