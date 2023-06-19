@@ -1,10 +1,12 @@
 package com.wjm.springmvc.mapper;
 
 import com.wjm.springmvc.bean.Article;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
+@Mapper
 public interface ArticleMapper {
     List<Article> getAllArticle();
 
