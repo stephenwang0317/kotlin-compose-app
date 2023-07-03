@@ -1,4 +1,4 @@
-package com.example.homework
+package com.example.homework.component
 
 
 import androidx.compose.foundation.background
@@ -25,6 +25,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.homework.R
 import com.example.homework.compositionLocal.LocalNavController
 import com.example.homework.model.entity.ArticleModelItem
 

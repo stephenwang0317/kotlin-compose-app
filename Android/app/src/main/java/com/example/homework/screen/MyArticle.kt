@@ -16,10 +16,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.homework.component.ArticleCard
 import com.example.homework.component.CommentBox
 import com.example.homework.compositionLocal.LocalNavController
 import com.example.homework.compositionLocal.LocalUserViewModel
-import com.example.homework.model.entity.ArticleModelItem
 import com.example.homework.ui.theme.Purple500
 import com.example.homework.viewmodel.ArticleViewModel
 import com.example.homework.viewmodel.CommentViewModel

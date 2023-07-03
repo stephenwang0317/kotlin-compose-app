@@ -4,6 +4,9 @@ spring:
     username: remote
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
+  servlet:
+    multipart:
+      enabled: true
 
 mybatis:
   mapper-locations: classpath:com/wjm/springmvc/mapper/*.xml
@@ -14,3 +17,6 @@ server:
   port: 44444
   servlet:
     context-path: /demo2
+
+
+file-save-path: /root/forum/img/

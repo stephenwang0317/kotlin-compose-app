@@ -16,20 +16,21 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.homework.compositionLocal.LocalNavController
 import kotlinx.coroutines.launch
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
-
+@Preview(showBackground = true)
 @Composable
 fun MyFab(
     modifier: Modifier = Modifier,
-    onFinish: ()->Unit,
+    onFinish: ()->Unit = {},
     baseSize: Int = 70,
     animateSize: Int = 20,
-    icon: @Composable ()->Unit
+    icon: @Composable ()->Unit = {}
 ) {
 //    val scaffoldState = rememberScaffoldState()
 
