@@ -20,3 +20,4 @@ server:
 
 
 file-save-path: /root/forum/img/
+page-size: 2

@@ -6,6 +6,10 @@ import com.wjm.springmvc.mapper.CommentMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -49,6 +53,11 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public Boolean createComment(Comment c) {
+        Timestamp timestamp = new Timestamp(new Date().getTime());
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String dateNow= df.format(timestamp);
+        c.setCmt_time(dateNow);
+
         return commentMapper.createComment(c) == 1;
     }
 }

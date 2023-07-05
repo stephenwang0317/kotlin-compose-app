@@ -20,4 +20,5 @@ public interface ArticleMapper {
 
     Integer articleLikeMinus(@Param("art_id") Integer art_id);
 
+    Integer deleteArticle(@Param("art_id") Integer art_id);
 }

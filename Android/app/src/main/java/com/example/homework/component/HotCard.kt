@@ -54,7 +54,7 @@ fun HotCard(
     Card(
         enabled = true,
         onClick = {
-            val intent: Intent = Intent(Intent.ACTION_VIEW, uri)
+            val intent = Intent(Intent.ACTION_VIEW, uri)
             context.startActivity(Intent.createChooser(intent, "选择浏览器"))
         },
         modifier = Modifier

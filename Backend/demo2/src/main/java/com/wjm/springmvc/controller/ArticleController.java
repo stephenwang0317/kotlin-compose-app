@@ -5,14 +5,11 @@ import com.wjm.springmvc.bean.BaseResponse;
 import com.wjm.springmvc.bean.ListResponse;
 import com.wjm.springmvc.service.ArticleService;
 import com.wjm.springmvc.service.LikeService;
-import org.apache.commons.logging.Log;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -25,10 +22,17 @@ public class ArticleController {
     @Autowired
     LikeService likeService;
 
+
     @GetMapping("")
     @ResponseBody
     ListResponse<Article> getAllArticles() {
         return articleService.getAllArticles();
+    }
+
+    @GetMapping("/page/{page_num}")
+    @ResponseBody
+    ListResponse<Article> getPageArticles(@PathVariable Integer page_num) {
+        return articleService.getPageArticles(page_num);
     }
 
     @GetMapping("/user/{user_id}")
@@ -50,6 +54,17 @@ public class ArticleController {
     Article getArticleById(@PathVariable Integer art_id) {
         Article ret = articleService.getArticleById(art_id);
         return ret == null ? new Article() : ret;
+    }
+
+    @DeleteMapping("/{art_id}")
+    @ResponseBody
+    BaseResponse deleteArticle(@PathVariable Integer art_id) {
+        boolean ans = articleService.deleteArticle(art_id);
+        if (ans) {
+            return new BaseResponse(0, "delete success");
+        } else {
+            return new BaseResponse(-1, "delete failed");
+        }
     }
 
     @PutMapping("/{user_id}/{art_id}")

@@ -41,4 +41,11 @@
             set art_like=art_like - 1
             where art_id = #{art_id}
         </update>
+
+<!--    Integer deleteArticle(@Param("art_id") Integer art_id);-->
+        <delete id="deleteArticle" parameterType="Integer">
+            delete
+            from Article
+            where art_id = #{art_id}
+        </delete>
 </mapper>

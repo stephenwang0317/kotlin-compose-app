@@ -34,7 +34,8 @@
     <update id="changeInfo" parameterType="User">
         update User
         set user_name=#{user_name},
-            user_pwd=#{user_pwd}
+            user_pwd=#{user_pwd},
+            user_avater=#{user_avater}
         where user_id = #{user_id}
     </update>
 </mapper>
