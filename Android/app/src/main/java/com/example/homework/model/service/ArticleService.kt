@@ -11,10 +11,15 @@ interface ArticleService {
     @GET("article")
     suspend fun getAllArticle(): ArticleModel
 
-    @GET("/article/page/{page_num}")
+    @GET("article/page/{page_num}")
     suspend fun getPageArticle(
         @Path("page_num") page_num: Int
     ): ArticleModel
+
+    @DELETE("article/{art_id}")
+    suspend fun deleteArticle(
+        @Path("art_id") art_id: Int
+    ): BaseResponse
 
     @Headers("Content-Type: application/json;charset=UTF-8")
     @POST("article")

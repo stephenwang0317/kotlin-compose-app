@@ -16,6 +16,7 @@ class ArticleItemViewModel {
 
     var loading by mutableStateOf(true)
         private set
+    var deleting by mutableStateOf(false)
 
     // 0: not sure/loading
     // 1: like
@@ -58,5 +59,12 @@ class ArticleItemViewModel {
             artItem.artLike -= 1
         }
         isLike = -1
+    }
+
+    suspend fun deleteArticle(art_id: Int) {
+        deleting = true
+        Log.i("===========id", art_id.toString())
+        val ans = articleService.deleteArticle(art_id)
+        deleting = false
     }
 }

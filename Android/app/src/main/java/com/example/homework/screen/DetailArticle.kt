@@ -138,6 +138,7 @@ fun DetailContent(
 ) {
 
     val coroutineScope = rememberCoroutineScope()
+    val naviCon = LocalNavController.current
 
     Column(
         modifier = modifier
@@ -213,6 +214,7 @@ fun DetailContent(
                                         )
                                     }
                                 }
+
                                 1 -> {
                                     coroutineScope.launch {
                                         viewModel.dislike(
@@ -221,11 +223,30 @@ fun DetailContent(
                                         )
                                     }
                                 }
+
                                 else -> {}
                             }
                         }
                 )
             }
+            if (usrModel.userId == viewModel.artItem.artAuthor) {
+                if (viewModel.deleting) {
+                    CircularProgressIndicator()
+                } else {
+                    Icon(
+                        imageVector = Icons.Default.Delete,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(50.dp, 50.dp)
+                            .clickable {
+                                coroutineScope.launch {
+                                    viewModel.deleteArticle(art_id ?: 0)
+                                    naviCon.popBackStack()
+                                }
+                            })
+                }
+            }
+
         }
 
         Divider(
