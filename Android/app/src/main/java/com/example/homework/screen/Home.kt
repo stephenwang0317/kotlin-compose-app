@@ -2,6 +2,7 @@ package com.example.homework
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
@@ -18,7 +19,10 @@ import com.example.homework.ui.theme.Purple500
 import com.example.homework.viewmodel.ArticleViewModel
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.statusBarsHeight
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import kotlinx.coroutines.launch
 
 
 @ExperimentalMaterialApi
@@ -67,21 +71,29 @@ fun HomeView(
                         )
                     }
                 } else {
-                    LazyColumn(
-                        contentPadding = it,
-                        verticalArrangement = Arrangement.spacedBy(10.dp),
-                        content = {
-                            items(
-                                articleViewModel.tmpList
-                            ) { article ->
-                                ArticleCard(articleItem = article)
+                    SwipeRefresh(
+                        state = rememberSwipeRefreshState(isRefreshing = articleViewModel.isRefreshing),
+                        onRefresh = {
+                            coroutineScope.launch {
+                                articleViewModel.refresh()
                             }
-                        },
-                        state = scrollState
-                    )
+                        }
+                    ) {
+                        LazyColumn(
+                            contentPadding = it,
+                            verticalArrangement = Arrangement.spacedBy(10.dp),
+                            content = {
+                                items(
+                                    articleViewModel.tmpList
+                                ) { article ->
+                                    ArticleCard(articleItem = article)
+                                }
+                            },
+                            state = scrollState,
+                        )
+                    }
                 }
             }
-
         }
     }
 }

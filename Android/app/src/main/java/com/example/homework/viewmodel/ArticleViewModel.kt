@@ -17,6 +17,10 @@ class ArticleViewModel {
 
     var loading by mutableStateOf(false)
         private set
+    var loadingMore by mutableStateOf(false)
+        private set
+    var isRefreshing by mutableStateOf(false)
+        private set
 
     suspend fun getAllArticle() {
         loading = true
@@ -33,16 +37,40 @@ class ArticleViewModel {
         loading = false
     }
 
+    suspend fun getPageArticles(page_num: Int = 1) {
+        loadingMore = true
+
+        val res = articleService.getPageArticle(page_num)
+        if (res.code == 0) {
+            res.list?.forEach {
+                if (it != null) tmpList.add(it)
+            }
+        }
+
+        loadingMore = false
+    }
+
+    suspend fun refresh() {
+        isRefreshing = true
+
+        tmpList.clear()
+        val res = articleService.getAllArticle()
+        if (res.code == 0) {
+            res.list?.forEach {
+                if (it != null) tmpList.add(it)
+            }
+        }
+
+        isRefreshing = false
+    }
     suspend fun getUserArticle(user_id: Int) {
         loading = true
 
         val res = articleService.getUserArticle(user_id = user_id)
         Log.i(">>>>>>>>>>", res.toString())
         if (res.code == 0) {
-            if (res.code == 0) {
-                res.list?.forEach {
-                    if (it != null) tmpList.add(it)
-                }
+            res.list?.forEach {
+                if (it != null) tmpList.add(it)
             }
         }
 
@@ -55,10 +83,8 @@ class ArticleViewModel {
         val res = articleService.getUserLike(user_id)
         Log.i(">>>>>>>>>>", res.toString())
         if (res.code == 0) {
-            if (res.code == 0) {
-                res.list?.forEach {
-                    if (it != null) tmpList.add(it)
-                }
+            res.list?.forEach {
+                if (it != null) tmpList.add(it)
             }
         }
 

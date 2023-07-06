@@ -11,6 +11,11 @@ interface ArticleService {
     @GET("article")
     suspend fun getAllArticle(): ArticleModel
 
+    @GET("/article/page/{page_num}")
+    suspend fun getPageArticle(
+        @Path("page_num") page_num: Int
+    ): ArticleModel
+
     @Headers("Content-Type: application/json;charset=UTF-8")
     @POST("article")
     suspend fun createArticle(
