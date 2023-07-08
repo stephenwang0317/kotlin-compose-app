@@ -23,4 +23,6 @@
     <string name="show_more">显示更多…</string>
     <string name="hot_rate">"热搜指数 %s"</string>
     <string name="floor_index">" #%d楼"</string>
+    <string name="img_base_url">http://8.130.106.215:44444/demo2/img/</string>
+    <string name="default_avatar">default.jpg</string>
 </resources>

@@ -30,10 +30,14 @@ import androidx.navigation.navArgument
 import com.example.homework.component.ChangeInfo
 import com.example.homework.compositionLocal.LocalNavController
 import com.example.homework.compositionLocal.LocalUserViewModel
+import com.example.homework.model.entity.UserModel
+import com.example.homework.screen.ChangeAvatar
 
 import com.example.homework.ui.theme.HomeWorkTheme
 import com.example.homework.viewmodel.UserViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.adapter
 
 
 class MainActivity : ComponentActivity() {
@@ -99,6 +103,11 @@ fun Navigator() {
             composable("MyLike") { ListOfArticles(title = "我的点赞") }
             composable("MyComment") { ListOfComments() }
             composable("ChangeInfo") { ChangeInfo() }
+            composable(
+                route = "ChangeAvatar",
+            ) {
+                ChangeAvatar()
+            }
         }
     }
 }

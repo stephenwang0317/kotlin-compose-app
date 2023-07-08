@@ -22,11 +22,14 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.rememberImagePainter
 import com.example.homework.LoginView
 import com.example.homework.R
 import com.example.homework.compositionLocal.LocalNavController
 import com.example.homework.compositionLocal.LocalUserViewModel
+import com.example.homework.model.entity.UserModel
 import com.example.homework.viewmodel.UserViewModel
+import com.squareup.moshi.Moshi
 import kotlinx.coroutines.launch
 
 
@@ -105,7 +108,9 @@ fun DrawerContent(
                 }
             },
             enabled = !userViewModel.loading,
-            modifier = Modifier.padding(20.dp).width(90.dp),
+            modifier = Modifier
+                .padding(20.dp)
+                .width(90.dp),
             shape = RoundedCornerShape(5)
         ) {
             Text(
@@ -124,6 +129,9 @@ fun DrawerHead(
     userViewModel: UserViewModel,
 ) {
     val userModel = userViewModel.userInfo
+    val navHostController = LocalNavController.current
+
+
     Row(
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.Bottom,
@@ -132,7 +140,12 @@ fun DrawerHead(
     ) {
         Spacer(modifier = Modifier.fillMaxWidth(0.05f))
         Image(
-            imageVector = Icons.Default.Person,
+            painter = rememberImagePainter(
+                data = stringResource(R.string.img_base_url) + (userModel?.userAvatar),
+                builder = {
+                    placeholder(R.drawable.ic_launcher_background)
+                }
+            ),
             contentDescription = null,
             modifier = Modifier
                 .clip(
@@ -144,7 +157,9 @@ fun DrawerHead(
                     color = Color.Black,
                     shape = CircleShape
                 )
-
+                .clickable {
+                    navHostController.navigate("ChangeAvatar")
+                }
         )
         Spacer(modifier = Modifier.fillMaxWidth(0.05f))
 
