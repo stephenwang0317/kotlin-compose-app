@@ -17,7 +17,18 @@ server:
   port: 44444
   servlet:
     context-path: /demo2
+  tomcat:
+    accesslog:
+      enabled: true
+      directory: logs
+    basedir: tomcat
 
+logging:
+  level:
+    org.apache.tomcat: DEBUG
+    org.apache.catalina: DEBUG
+  file:
+    path: ./logging
 
 file-save-path: /root/forum/img/
 page-size: 2

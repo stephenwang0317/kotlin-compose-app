@@ -8,6 +8,7 @@
         <version>2.7.12</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
+<!--    <packaging>war</packaging>-->
     <groupId>com.wjm</groupId>
     <artifactId>demo2</artifactId>
     <version>0.0.1-SNAPSHOT</version>

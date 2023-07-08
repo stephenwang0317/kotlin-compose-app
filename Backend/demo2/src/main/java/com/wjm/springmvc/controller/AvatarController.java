@@ -31,7 +31,7 @@ public class AvatarController {
     public BaseResponse uploadImg(MultipartFile img, @PathVariable Integer id) {
         String fileName = img.getOriginalFilename();
         String fileType = fileName.substring(fileName.lastIndexOf("."));
-        fileName = UUID.randomUUID().toString() + fileName;
+        fileName = UUID.randomUUID().toString() + fileType;
 
         String photoPath = fileSavePath;
         File file = new File(photoPath);
@@ -50,7 +50,9 @@ public class AvatarController {
             return new BaseResponse(0, fileName);
         } catch (IOException e) {
 //            throw new RuntimeException(e);
+//            e.getStackTrace();
             return new BaseResponse(-1, "upload failed");
+
         }
 
     }
